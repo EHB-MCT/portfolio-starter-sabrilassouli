@@ -1,7 +1,6 @@
-
 const express = require('express');
-const knex = require('knex'); 
-const knexConfig = require('../knexfile'); 
+const knex = require('knex');
+const knexConfig = require('../knexfile');
 
 const db = knex(knexConfig.development);
 
@@ -49,4 +48,29 @@ const port = process.env.PORT || 3000;
 // Start the Express server and listen for incoming requests on the specified port
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
+});
+
+
+app.get('/courses', async (req, res) => {
+    try {
+        const courses = await db('courses').select('*');
+        res.json(courses);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to fetch courses'
+        });
+    }
+});
+
+app.post('/courses', async (req, res) => {
+    try {
+        const [id] = await db('courses').insert(req.body).returning('id');
+        res.status(201).json({
+            id
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to create courses'
+        });
+    }
 });
