@@ -98,3 +98,27 @@ app.post('/questions', async (req, res) => {
         });
     }
 });
+
+app.get('/answers', async (req, res) => {
+    try {
+        const answers = await db('answers').select('*');
+        res.json(answers);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to fetch answers'
+        });
+    }
+});
+
+app.post('/answers', async (req, res) => {
+    try {
+        const [id] = await db('answers').insert(req.body).returning('id');
+        res.status(201).json({
+            id
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to create answers'
+        });
+    }
+});
