@@ -74,3 +74,27 @@ app.post('/courses', async (req, res) => {
         });
     }
 });
+
+app.get('/questions', async (req, res) => {
+    try {
+        const questions = await db('questions').select('*');
+        res.json(questions);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to fetch questions'
+        });
+    }
+});
+
+app.post('/questions', async (req, res) => {
+    try {
+        const [id] = await db('questions').insert(req.body).returning('id');
+        res.status(201).json({
+            id
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to create questions'
+        });
+    }
+});
