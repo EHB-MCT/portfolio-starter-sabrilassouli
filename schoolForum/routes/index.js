@@ -1,6 +1,7 @@
 const express = require('express');
 const knex = require('knex');
 const knexConfig = require('../knexfile');
+const cors = require('cors');  // Add this line to import the cors package
 
 const db = knex(knexConfig.development);
 const {
@@ -30,11 +31,10 @@ const {
     checkComment,
 } = require('../helpers/answerEndpointHelpers.js');
 
-
 const app = express();
 
-
 app.use(express.json());
+app.use(cors());  // Add this line to enable CORS for all routes
 
 // Define a route to handle GET requests for retrieving all users
 app.get('/users', async (req, res) => {
@@ -106,7 +106,6 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-
 
 app.get('/courses', async (req, res) => {
     try {
@@ -219,7 +218,6 @@ app.post('/questions', async (req, res) => {
         });
     }
 
-
     try {
         const [id] = await db('questions').insert(req.body).returning('id');
         res.status(201).json({
@@ -245,7 +243,6 @@ app.get('/answers', async (req, res) => {
 
 app.post('/answers', async (req, res) => {
     const {
-
         creator_id,
         comment,
         upvotes
@@ -267,7 +264,6 @@ app.post('/answers', async (req, res) => {
             error: 'Invalid upvotes'
         });
     }
-
 
     try {
         const [id] = await db('answers').insert(req.body).returning('id');
