@@ -25,6 +25,32 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    const {
+        id
+    } = req.params;
+    try {
+        const question = await db('questions').where({
+            id
+        }).first();
+        if (!question) {
+            return res.status(404).json({
+                error: 'questions not found'
+            });
+        }
+        res.json(question);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to fetch question'
+        });
+    }
+});
+
+
+
+
+
+
 router.get('/:course_id', async (req, res) => {
     const {
         course_id
