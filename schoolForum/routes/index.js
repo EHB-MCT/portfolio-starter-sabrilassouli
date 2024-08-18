@@ -9,6 +9,12 @@ const {
     checkPassword,
     checkStatus
 } = require("./../helpers/userEndpointHelpers")
+const {
+
+    checkCourseName,
+    checkCourseDescription,
+    checkCourseTeacher,
+} = require("./../helpers/courseEndpointHelpers.js")
 
 
 const app = express();
@@ -100,14 +106,42 @@ app.get('/courses', async (req, res) => {
 });
 
 app.post('/courses', async (req, res) => {
+    const {
+        name,
+        description,
+        teacher
+    } = req.body;
+
+    // Validate course data
+    if (!checkCourseName(name)) {
+        return res.status(400).json({
+            error: 'Invalid course name'
+        });
+    }
+
+    if (!checkCourseDescription(description)) {
+        return res.status(400).json({
+            error: 'Invalid course description'
+        });
+    }
+
+    if (!checkCourseTeacher(teacher)) {
+        return res.status(400).json({
+            error: 'Invalid course teacher'
+        });
+    }
+
     try {
+        // Insert the new course into the database and return the newly created course's ID
         const [id] = await db('courses').insert(req.body).returning('id');
+        // Respond with the ID of the newly created course and a 201 status code
         res.status(201).json({
             id
         });
     } catch (err) {
+        // Respond with an error message and a 500 status code if the insertion fails
         res.status(500).json({
-            error: 'Failed to create courses'
+            error: 'Failed to create course'
         });
     }
 });

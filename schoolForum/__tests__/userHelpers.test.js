@@ -11,7 +11,7 @@ describe('User Validation Tests', () => {
         expect(checkUserName(null)).toBe(false);
         expect(checkUserName(1)).toBe(false);
         expect(checkUserName('fknfnfrnfnfenmenvnfmenmzfnfmenfenmfnzfzpnfnpvhtegrezgheehjjert')).toBe(false); // too long
-        expect(checkUserName('é&§ç')).toBe(false); // invalid characters
+        expect(checkUserName('/^[a-zA-Z0-9 ]+$/')).toBe(false); // invalid characters
         expect(checkUserName('sabri')).toBe(true);
         expect(checkUserName('John Doe')).toBe(true); // valid with space
         expect(checkUserName('User123')).toBe(true); // valid alphanumeric
@@ -20,6 +20,7 @@ describe('User Validation Tests', () => {
     test('check email', () => {
         expect(checkEmail('')).toBe(false);
         expect(checkEmail(null)).toBe(false);
+        expect(checkUserName('/^[a-zA-Z0-9 ]+$/')).toBe(false); // invalid characters
         expect(checkEmail('invalidemail')).toBe(false);
         expect(checkEmail('email@')).toBe(false);
         expect(checkEmail('email@domain')).toBe(false);
