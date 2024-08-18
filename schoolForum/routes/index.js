@@ -26,6 +26,10 @@ const {
     checkUpvotes
 } = require('../helpers/questionEndpointHelpers.js');
 
+const {
+    checkComment,
+} = require('../helpers/answerEndpointHelpers.js');
+
 
 const app = express();
 
@@ -240,6 +244,31 @@ app.get('/answers', async (req, res) => {
 });
 
 app.post('/answers', async (req, res) => {
+    const {
+
+        creator_id,
+        comment,
+        upvotes
+    } = req.body;
+
+    if (!checkCreatorId(creator_id)) {
+        return res.status(400).json({
+            error: 'Invalid creator_id'
+        });
+    }
+    if (!checkComment(comment)) {
+        return res.status(400).json({
+            error: 'Invalid comment'
+        });
+    }
+
+    if (!checkUpvotes(upvotes)) {
+        return res.status(400).json({
+            error: 'Invalid upvotes'
+        });
+    }
+
+
     try {
         const [id] = await db('answers').insert(req.body).returning('id');
         res.status(201).json({
