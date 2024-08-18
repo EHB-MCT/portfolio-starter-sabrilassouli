@@ -9,12 +9,22 @@ const {
     checkPassword,
     checkStatus
 } = require("./../helpers/userEndpointHelpers")
-const {
 
+const {
     checkCourseName,
     checkCourseDescription,
     checkCourseTeacher,
 } = require("./../helpers/courseEndpointHelpers.js")
+
+const {
+    checkCreatorId,
+    checkCourseId,
+    checkTitle,
+    checkDescription,
+    checkViews,
+    checkComments,
+    checkUpvotes
+} = require('../helpers/questionEndpointHelpers.js');
 
 
 const app = express();
@@ -158,6 +168,54 @@ app.get('/questions', async (req, res) => {
 });
 
 app.post('/questions', async (req, res) => {
+    const {
+        creator_id,
+        course_id,
+        title,
+        description,
+        views,
+        comments,
+        upvotes
+    } = req.body;
+
+    // Validate course data
+    if (!checkCreatorId(creator_id)) {
+        return res.status(400).json({
+            error: 'Invalid creator_id'
+        });
+    }
+    if (!checkCourseId(course_id)) {
+        return res.status(400).json({
+            error: 'Invalid course_id'
+        });
+    }
+    if (!checkTitle(title)) {
+        return res.status(400).json({
+            error: 'Invalid title'
+        });
+    }
+    if (!checkDescription(description)) {
+        return res.status(400).json({
+            error: 'Invalid description'
+        });
+    }
+    if (!checkViews(views)) {
+        return res.status(400).json({
+            error: 'Invalid views'
+        });
+    }
+    if (!checkComments(comments)) {
+        return res.status(400).json({
+            error: 'Invalid comments'
+        });
+    }
+    if (!checkUpvotes(upvotes)) {
+        return res.status(400).json({
+            error: 'Invalid upvotes'
+        });
+    }
+
+
     try {
         const [id] = await db('questions').insert(req.body).returning('id');
         res.status(201).json({
