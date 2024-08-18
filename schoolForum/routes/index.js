@@ -1,7 +1,7 @@
 const express = require('express');
 const knex = require('knex');
 const knexConfig = require('../knexfile');
-const cors = require('cors');  // Add this line to import the cors package
+const cors = require('cors'); // Add this line to import the cors package
 
 const db = knex(knexConfig.development);
 const {
@@ -29,12 +29,13 @@ const {
 
 const {
     checkComment,
+    checkQuestionId
 } = require('../helpers/answerEndpointHelpers.js');
 
 const app = express();
 
 app.use(express.json());
-app.use(cors());  // Add this line to enable CORS for all routes
+app.use(cors()); // Add this line to enable CORS for all routes
 
 // Define a route to handle GET requests for retrieving all users
 app.get('/users', async (req, res) => {
@@ -244,6 +245,7 @@ app.get('/answers', async (req, res) => {
 app.post('/answers', async (req, res) => {
     const {
         creator_id,
+        question_id,
         comment,
         upvotes
     } = req.body;
@@ -251,6 +253,11 @@ app.post('/answers', async (req, res) => {
     if (!checkCreatorId(creator_id)) {
         return res.status(400).json({
             error: 'Invalid creator_id'
+        });
+    }
+    if (!checkQuestionId(question_id)) {
+        return res.status(400).json({
+            error: 'Invalid question_id'
         });
     }
     if (!checkComment(comment)) {

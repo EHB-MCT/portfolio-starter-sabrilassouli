@@ -3,6 +3,7 @@
 
 const {
     checkCreatorId,
+    checkQuestionId,
     checkComment,
     checkUpvotes
 } = require('../helpers/answerEndpointHelpers.js');
@@ -20,6 +21,20 @@ describe('Questions Helper Functions', () => {
         expect(checkCreatorId('1')).toBe(false);
         expect(checkCreatorId('nevnzovo')).toBe(false);
         expect(checkCreatorId(null)).toBe(false);
+    });
+
+       // Tests for checkQuestionId
+       test('should return true for valid question IDs', () => {
+        expect(checkQuestionId(1)).toBe(true);
+        expect(checkQuestionId(100)).toBe(true);
+    });
+
+    test('should return false for invalid question IDs', () => {
+        expect(checkQuestionId(-1)).toBe(false);
+        expect(checkQuestionId(0)).toBe(false);
+        expect(checkQuestionId('1')).toBe(false);
+        expect(checkQuestionId('nevnzovo')).toBe(false);
+        expect(checkQuestionId(null)).toBe(false);
     });
 
     // Tests for checkComment

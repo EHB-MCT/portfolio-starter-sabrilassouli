@@ -7,6 +7,15 @@ function checkCreatorId(creatorId) {
     return Number.isInteger(creatorId) && creatorId > 0;
 }
 
+/**
+ * Checks if the creator_id is valid.
+ * @param {number} questionId - The creator ID to check.
+ * @returns {boolean} - Returns true if valid, otherwise false.
+ */
+function checkQuestionId(questionId) {
+    return Number.isInteger(questionId) && questionId > 0;
+}
+
 
 /**
  * Checks if the comment is valid.
@@ -28,6 +37,7 @@ function checkUpvotes(upvotes) {
 
 module.exports = {
     checkCreatorId,
+    checkQuestionId,
     checkComment,
     checkUpvotes
 };
