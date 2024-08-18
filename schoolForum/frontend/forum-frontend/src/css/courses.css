@@ -1,0 +1,60 @@
+/* Dark mode container for the entire courses section */
+.courses-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #1e1e1e; /* Dark background */
+  color: #e0e0e0; /* Light text color */
+  border-radius: 8px;
+}
+
+/* Title styling */
+.courses-title {
+  text-align: center;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+/* Style for the course list */
+.courses-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Style for each list item */
+.course-item {
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Button styling */
+.course-button {
+  display: inline-block;
+  padding: 20px 60px;
+  font-size: 18px;
+  color: #e0e0e0;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 400px;
+  text-align: center;
+}
+
+/* Button hover effect */
+.course-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Error message styling */
+.error-message {
+  color: #e74c3c;
+  text-align: center;
+  font-weight: bold;
+}

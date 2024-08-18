@@ -1,19 +1,19 @@
-// src/App.js
 import React from 'react';
-import Courses from './home';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Courses from './pages/home';
+import CourseDetail from './pages/questions';
+import Header from './pages/header';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>My Courses App</h1>
-      </header>
-      <main>
-        <Courses />
-      </main>
-    </div>
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Courses />} />
+        <Route path="/course/:id" element={<CourseDetail />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
