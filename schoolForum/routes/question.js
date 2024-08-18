@@ -14,6 +14,7 @@ const {
     checkUpvotes
 } = require('../helpers/questionEndpointHelpers');
 
+// Route to get all questions
 router.get('/', async (req, res) => {
     try {
         const questions = await db('questions').select('*');
@@ -25,6 +26,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Route to get a specific question by ID
 router.get('/:id', async (req, res) => {
     const {
         id
@@ -35,7 +37,7 @@ router.get('/:id', async (req, res) => {
         }).first();
         if (!question) {
             return res.status(404).json({
-                error: 'questions not found'
+                error: 'Question not found'
             });
         }
         res.json(question);
@@ -46,20 +48,14 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-
-
-
-
-
-router.get('/:course_id', async (req, res) => {
+// Route to get questions by course ID
+router.get('/course/:courseId', async (req, res) => {
     const {
-        course_id
+        courseId
     } = req.params;
     try {
-        const questions = await db('questions').where({
-            course_id
-        }).select('*');
-        res.json(questions);
+        const questions = await db('questions').where('course_id', courseId);
+        res.json(questions); // Should return an array of questions
     } catch (err) {
         res.status(500).json({
             error: 'Failed to fetch questions'
@@ -67,6 +63,7 @@ router.get('/:course_id', async (req, res) => {
     }
 });
 
+// Route to create a new question
 router.post('/', async (req, res) => {
     const {
         creator_id,
