@@ -21,6 +21,9 @@ const QuestionDetail = () => {
         // Fetch answers related to the question
         const answersResponse = await axios.get(`http://localhost:3000/answers/question/${id}`);
         setAnswers(answersResponse.data); // Ensure this is an array
+
+        // Increment views for the question
+        await incrementViews(id);
       } catch (error) {
         setError("Failed to fetch question details or answers");
       }
@@ -29,16 +32,22 @@ const QuestionDetail = () => {
     fetchQuestionAndAnswers();
   }, [id]);
 
+  const incrementViews = async (questionId) => {
+    try {
+      await axios.put(`http://localhost:3000/questions/${questionId}/increment-views`);
+     
+    } catch (error) {
+      console.error('Error incrementing views:', error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Convert id to integer before sending
-    const questionIdInt = parseInt(id, 10);
 
     try {
       await axios.post('http://localhost:3000/answers', {
         creator_id: 4,
-        question_id: questionIdInt, // Ensure question_id is an integer
+        question_id: id,
         comment,
         upvotes: 0,
       });
@@ -46,8 +55,8 @@ const QuestionDetail = () => {
       setSuccess('Answer posted successfully!');
       setComment('');
 
-      // Fetch updated answers
-      const answersResponse = await axios.get(`http://localhost:3000/answers/question/${questionIdInt}`);
+      // Fetch updated answers list
+      const answersResponse = await axios.get(`http://localhost:3000/answers/question/${id}`);
       setAnswers(answersResponse.data);
     } catch (err) {
       setError('Failed to post answer');
