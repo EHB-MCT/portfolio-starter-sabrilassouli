@@ -123,4 +123,38 @@ router.post('/', async (req, res) => {
     }
 });
 
+
+// Increment views endpoint
+router.put('/:id/increment-views', async (req, res) => {
+    const {
+        id
+    } = req.params;
+
+    try {
+        // Check if the question exists
+        const question = await db('questions').where({
+            id
+        }).first();
+        if (!question) {
+            return res.status(404).json({
+                error: 'Question not found'
+            });
+        }
+
+        // Increment the views count
+        await db('questions')
+            .where({
+                id
+            })
+            .increment('views', 1);
+       
+
+        res.json(updatedQuestion);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to update views'
+        });
+    }
+});
+
 module.exports = router;
