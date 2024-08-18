@@ -3,6 +3,12 @@ const knex = require('knex');
 const knexConfig = require('../knexfile');
 
 const db = knex(knexConfig.development);
+const {
+    checkUserName,
+    checkEmail,
+    checkPassword,
+    checkStatus
+} = require("./../helpers/userEndpointHelpers")
 
 
 const app = express();
@@ -27,6 +33,37 @@ app.get('/users', async (req, res) => {
 
 // Define a route to handle POST requests for creating a new user
 app.post('/users', async (req, res) => {
+    const {
+        name,
+        email,
+        password,
+        status
+    } = req.body;
+
+    // Validate user data
+    if (!checkUserName(name)) {
+        return res.status(400).json({
+            error: 'Invalid username'
+        });
+    }
+
+    if (!checkEmail(email)) {
+        return res.status(400).json({
+            error: 'Invalid email address'
+        });
+    }
+
+    if (!checkPassword(password)) {
+        return res.status(400).json({
+            error: 'Invalid password'
+        });
+    }
+
+    if (!checkStatus(status)) {
+        return res.status(400).json({
+            error: 'Invalid status'
+        });
+    }
     try {
         // Insert the new user into the database and return the newly created user's ID
         const [id] = await db('users').insert(req.body).returning('id');

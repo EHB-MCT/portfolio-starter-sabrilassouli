@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll",
+    "start": "npx knex migrate:latest --cwd migrations && node routes/index.js ",
+    "dev": "npx knex migrate:latest --cwd migrations && nodemon routes/index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +15,11 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "knex": "^3.1.0",
+    "nodemon": "^3.1.4",
     "pg": "^8.12.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }
