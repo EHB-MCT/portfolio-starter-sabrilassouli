@@ -22,6 +22,25 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/question/:questionId', async (req, res) => {
+    const {
+        questionId
+    } = req.params;
+    try {
+        const answers = await db('answers')
+            .join('users', 'answers.creator_id', 'users.id')
+            .where('answers.question_id', questionId)
+            .select('answers.*', 'users.name as creator_name'); 
+        res.json(answers);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to fetch answers'
+        });
+    }
+});
+
+
+
 router.post('/', async (req, res) => {
     const {
         creator_id,
