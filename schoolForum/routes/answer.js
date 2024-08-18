@@ -30,7 +30,7 @@ router.get('/question/:questionId', async (req, res) => {
         const answers = await db('answers')
             .join('users', 'answers.creator_id', 'users.id')
             .where('answers.question_id', questionId)
-            .select('answers.*', 'users.name as creator_name'); 
+            .select('answers.*', 'users.name as creator_name');
         res.json(answers);
     } catch (err) {
         res.status(500).json({
@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
         creator_id,
         question_id,
         comment,
-        upvotes
+        upvotes = 0
     } = req.body;
 
     if (!checkCreatorId(creator_id)) {
@@ -71,11 +71,17 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const [id] = await db('answers').insert(req.body).returning('id');
+        const [id] = await db('answers').insert({
+            creator_id,
+            question_id,
+            comment,
+            upvotes
+        }).returning('id');
         res.status(201).json({
             id
         });
     } catch (err) {
+        console.error('Database insert error:', err);
         res.status(500).json({
             error: 'Failed to create answer'
         });
