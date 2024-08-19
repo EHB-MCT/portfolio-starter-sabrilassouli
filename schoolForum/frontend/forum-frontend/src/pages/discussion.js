@@ -80,12 +80,14 @@ const QuestionDetail = () => {
 
       setSuccess("Answer posted successfully!");
       setComment("");
-
       // Fetch updated answers list
-      const answersResponse = await axios.get(
-        `http://localhost:3000/answers/question/${id}`
+
+      const thequestionId = parseInt(id, 10);
+      await axios.put(
+        `http://localhost:3000/questions/${thequestionId}/increment-comments`
       );
-      setAnswers(answersResponse.data);
+
+      window.location.reload();
     } catch (err) {
       setError("Failed to post answer");
     }
