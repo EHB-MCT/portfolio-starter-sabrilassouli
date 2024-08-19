@@ -1,11 +1,9 @@
-
-
 .course-detail-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #1e1e1e; 
-  color: #e0e0e0; 
+  background-color: #1e1e1e;
+  color: #e0e0e0;
   border-radius: 8px;
 }
 
@@ -26,8 +24,8 @@
 }
 
 .question-item {
-  background-color: #2c2c2c; 
-  color: #e0e0e0; 
+  background-color: #2c2c2c;
+  color: #e0e0e0;
   padding: 15px;
   margin: 10px 0;
   border-radius: 8px;
@@ -36,9 +34,8 @@
 .question-item strong {
   display: block;
   font-size: 20px;
-  color: #007bff; 
+  color: #007bff;
 }
-
 
 .question-details {
   margin-top: 10px;
@@ -50,7 +47,7 @@
 }
 
 .question-details a {
-  color: #007bff; 
+  color: #007bff;
   text-decoration: none;
   font-weight: bold;
 }
@@ -63,4 +60,88 @@
   color: #e74c3c;
   text-align: center;
   font-weight: bold;
+}
+
+.post-question-container {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.post-question-container h2 {
+  text-align: center;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: #e0e0e0;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  font-size: 16px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+button[type="submit"],
+button[type="button"] {
+  background-color: #007bff;
+  color: #e0e0e0;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+button[type="submit"]:hover,
+button[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+button[type="button"] {
+  background-color: #e74c3c;
+}
+
+button[type="button"]:hover {
+  background-color: #c0392b;
+}
+
+.success {
+  color: #2ecc71;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.error {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-top: 10px;
 }
