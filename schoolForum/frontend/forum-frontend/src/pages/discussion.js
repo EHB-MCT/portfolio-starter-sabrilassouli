@@ -1,25 +1,36 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import './../css/discussion.css'; // Import CSS for styling
+import "./../css/discussion.css";
+
+import Cookies from "js-cookie";
 
 const QuestionDetail = () => {
   const { id } = useParams();
   const [question, setQuestion] = useState(null);
-  const [answers, setAnswers] = useState([]); // State to store answers
+  const [answers, setAnswers] = useState([]);
   const [error, setError] = useState(null);
-  const [comment, setComment] = useState(''); // State for new answer comment
-  const [success, setSuccess] = useState(null); // State for success message
+  const [comment, setComment] = useState("");
+  const [success, setSuccess] = useState(null);
+
+  var creatorId = 7;
+
+  const userId = Cookies.get("userId");
+  console.log("User ID from cookie:", userId);
 
   useEffect(() => {
     const fetchQuestionAndAnswers = async () => {
       try {
         // Fetch question details
-        const questionResponse = await axios.get(`http://localhost:3000/questions/${id}`);
+        const questionResponse = await axios.get(
+          `http://localhost:3000/questions/${id}`
+        );
         setQuestion(questionResponse.data);
 
         // Fetch answers related to the question
-        const answersResponse = await axios.get(`http://localhost:3000/answers/question/${id}`);
+        const answersResponse = await axios.get(
+          `http://localhost:3000/answers/question/${id}`
+        );
         setAnswers(answersResponse.data); // Ensure this is an array
 
         // Increment views for the question
@@ -34,32 +45,49 @@ const QuestionDetail = () => {
 
   const incrementViews = async (questionId) => {
     try {
-      await axios.put(`http://localhost:3000/questions/${questionId}/increment-views`);
-     
+      await axios.put(
+        `http://localhost:3000/questions/${questionId}/increment-views`
+      );
     } catch (error) {
-      console.error('Error incrementing views:', error);
+      console.error("Error incrementing views:", error);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!userId) {
+      setError("You must be logged in to ask a question.");
+      return;
+    }
+
+    const posterId = parseInt(userId, 10);
+    console.log("here is the poster id");
+    console.log(posterId);
+    creatorId = posterId;
+    const questionId = parseInt(id, 10); // Convert userId to integer
+
+    console.log("here is the creator id");
+    console.log(creatorId);
+
     try {
-      await axios.post('http://localhost:3000/answers', {
-        creator_id: 4,
-        question_id: id,
+      await axios.post("http://localhost:3000/answers", {
+        creator_id: creatorId,
+        question_id: questionId,
         comment,
         upvotes: 0,
       });
 
-      setSuccess('Answer posted successfully!');
-      setComment('');
+      setSuccess("Answer posted successfully!");
+      setComment("");
 
       // Fetch updated answers list
-      const answersResponse = await axios.get(`http://localhost:3000/answers/question/${id}`);
+      const answersResponse = await axios.get(
+        `http://localhost:3000/answers/question/${id}`
+      );
       setAnswers(answersResponse.data);
     } catch (err) {
-      setError('Failed to post answer');
+      setError("Failed to post answer");
     }
   };
 
