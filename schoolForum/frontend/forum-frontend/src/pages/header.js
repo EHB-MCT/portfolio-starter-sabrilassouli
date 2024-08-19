@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import "./../css/header.css";
 
 const Header = () => {
@@ -13,14 +14,30 @@ const Header = () => {
   const [signupPassword, setSignupPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const cookieUserId = Cookies.get("userId");
+    if (cookieUserId) {
+      setIsLoggedIn(true);
+      console.log("User ID from cookie:", cookieUserId);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
   const handleHomeClick = () => {
+    Cookies.remove("userId");
     navigate("/");
   };
 
   const handleLoginClick = () => {
     setShowLoginForm(true);
+  };
+  const handleLogoutClick = () => {
+    Cookies.remove("userId");
+    window.location.reload();
   };
 
   const handleCloseLoginForm = () => {
@@ -47,7 +64,10 @@ const Header = () => {
       console.log("Login successful:", response.data);
       setSuccess("Login successful!");
       setError("");
-      // Optionally: Redirect or handle token storage here
+
+      Cookies.set("userId", response.data.userId, { expires: 1 });
+
+      window.location.reload();
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
       setError(error.response?.data?.message || "Login failed.");
@@ -76,18 +96,33 @@ const Header = () => {
 
   return (
     <header className="header-container">
-      <button className="home-button" onClick={handleHomeClick}>
-        Home
-      </button>
-      <div className="title">Forum Title</div>
-      <div className="auth-buttons">
-        <button className="login-button" onClick={handleLoginClick}>
-          Log In
-        </button>
-        <button className="signup-button" onClick={handleSignupClick}>
-          Sign Up
-        </button>
-      </div>
+      {isLoggedIn ? (
+        <div className="logged-in-header">
+          <button className="home-button" onClick={handleHomeClick}>
+            Home
+          </button>
+          <div className="title">Welcome Back!</div>
+          <button className="logout-button" onClick={handleLogoutClick}>
+            Log Out
+          </button>
+        </div>
+      ) : (
+        <div className="logged-out-header">
+          <button className="home-button" onClick={handleHomeClick}>
+            Home
+          </button>
+          <div className="title">EHB FORUM</div>
+          <div className="auth-buttons">
+            <button className="login-button" onClick={handleLoginClick}>
+              Log In
+            </button>
+            <button className="signup-button" onClick={handleSignupClick}>
+              Sign Up
+            </button>
+          </div>
+        </div>
+      )}
+
       {showLoginForm && (
         <div className="modal">
           <div className="form-container">

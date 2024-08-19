@@ -57,6 +57,14 @@
   transform: scale(1.05);
 }
 
+.logged-in-header,
+.logged-out-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .modal {
   position: fixed;
   top: 0;
