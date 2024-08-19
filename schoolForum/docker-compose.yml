@@ -1,16 +1,46 @@
-version: '3.1'
+
 
 services:
+  frontend:
+    build:
+      context: ./frontend/forum-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/forum-frontend/src:/app/src
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: . # Refers to the directory where docker-compose.yml is located
+      dockerfile: Dockerfile # Ensure this Dockerfile exists in the same directory as docker-compose.yml
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/src:/app/src # Corrected this path to point to the proper directory if necessary
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@db:5432/mydb
+    depends_on:
+      - db
+
   db:
     image: postgres
     restart: always
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: sabri
       POSTGRES_PASSWORD: amazingpassword
       POSTGRES_DB: forumDatabase
-    ports:
-      - "5432:5432"
     volumes:
-      - forumData:/var/lib/postgresql/data  
+      - forumData:/var/lib/postgresql/data
+
 volumes:
   forumData: {}
